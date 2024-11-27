@@ -1,54 +1,77 @@
 import TaskList from './TaskList';
+import { Provider } from 'react-redux';
+import PropTypes from 'prop-types';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { TaskBoxData, TaskReducers } from '../lib/store';
+
+const MockedStore = ({ mockedState, children }) => {
+  const mockedSlice = createSlice({
+    name: 'taskBox',
+    initialState: mockedState,
+    reducers: TaskReducers,
+  });
+
+  const mockedStore = configureStore({
+    reducer: {
+      taskBox: mockedSlice.reducer,
+    },
+  });
+
+  return <Provider store={mockedStore}>{children}</Provider>;
+};
+
+MockedStore.propTypes = {
+  mockedState: PropTypes.object,
+  children: PropTypes.node,
+};
 
 export default {
   title: 'TaskList',
   component: TaskList,
+
   tags: ['autodocs'],
+  excludeStories: ['MockedStore'],
 };
 
 export const Default = {
-  args: {
-    loading: false,
-    tasks: [
-      {
-        id: '1',
-        title: 'Task 1',
-        state: 'TASK_INBOX',
-      },
-    ],
-  },
+  decorators: [
+    (story) => <MockedStore mockedState={TaskBoxData}>{story()}</MockedStore>,
+  ],
 };
 
 export const WithPinnedTasks = {
-  args: {
-    tasks: [
-      {
-        id: '1',
-        title: 'Task 1',
-        state: 'TASK_INBOX',
-      },
-      {
-        id: '2',
-        title: 'Task 2',
-        state: 'TASK_ARCHIVED',
-      },
-      {
-        id: '3',
-        title: 'Task 3',
-        state: 'TASK_PINNED',
-      },
-    ],
-  },
+  decorators: [
+    (story) => {
+      const pinnedTasks = [
+        ...TaskBoxData.tasks,
+        { id: '999', title: 'Pinned task', state: 'TASK_PINNED' },
+      ];
+      const mockedState = { ...TaskBoxData, tasks: pinnedTasks };
+
+      return <MockedStore mockedState={mockedState}>{story()}</MockedStore>;
+    },
+  ],
 };
 
 export const Loading = {
-  args: {
-    loading: true,
-  },
+  decorators: [
+    (story) => {
+      const mockedState = {
+        ...TaskBoxData,
+        status: 'loading',
+      };
+
+      return <MockedStore mockedState={mockedState}>{story()}</MockedStore>;
+    },
+  ],
 };
 
 export const Empty = {
-  args: {
-    tasks: [],
-  },
+  decorators: [
+    (story) => {
+      const mockedState = { ...TaskBoxData, tasks: [] };
+
+      return <MockedStore mockedState={mockedState}>{story()}</MockedStore>;
+    },
+  ],
 };

@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function Task(
-  { task: { id, title, state } },
+export default function Task({
+  task: { id, title, state },
   onArchiveTask,
-  onPinTask
-) {
+  onPinTask,
+}) {
   return (
     <div className={`list-item ${state}`}>
       <label
-        htmlFor="checked"
+        htmlFor={`archiveTask-${id}`}
         aria-label={`archiveTask-${id}`}
         className="checkbox"
       >
@@ -19,6 +19,7 @@ export default function Task(
           name="checked"
           id={`archiveTask-${id}`}
           checked={state === 'TASK_ARCHIVED'}
+          onClick={() => onArchiveTask(id)}
         />
       </label>
 
@@ -29,6 +30,7 @@ export default function Task(
           readOnly={true}
           name="title"
           placeholder="Input title"
+          onClick={() => onArchiveTask(id)}
         />
       </label>
 
