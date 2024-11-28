@@ -323,7 +323,7 @@ textarea {
 }
 
 .list-item.TASK_PINNED .icon-star {
-  color: #fe9c3a;
+  color: #2cc5d2;
 }
 
 .list-item.TASK_ARCHIVED input[type='text'] {
