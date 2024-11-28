@@ -11,13 +11,11 @@ export default function TaskList() {
 
     const tasksInOrder = [
       ...tasks.filter((t) => t.state === 'TASK_PINNED'),
-      ...tasks.filter((t) => t.state !== 'TASK_PINNED'),
+      ...tasks.filter((t) => t.state === 'TASK_INBOX'),
+      ...tasks.filter((t) => t.state === 'TASK_ARCHIVED'),
     ];
-    const filteredTasks = tasksInOrder.filter(
-      (t) => t.state === 'TASK_INBOX' || t.state === 'TASK_PINNED'
-    );
 
-    return filteredTasks;
+    return tasksInOrder;
   });
   const { status } = useSelector((state) => state.taskBox);
 

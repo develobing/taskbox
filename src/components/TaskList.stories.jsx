@@ -2,13 +2,14 @@ import TaskList from './TaskList';
 import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { TaskBoxData, TaskReducers } from '../lib/store';
+import { TaskBoxData, TaskReducers, extraReducers } from '../lib/store';
 
-const MockedStore = ({ mockedState, children }) => {
+export const MockedStore = ({ mockedState, children }) => {
   const mockedSlice = createSlice({
     name: 'taskBox',
     initialState: mockedState,
     reducers: TaskReducers,
+    extraReducers,
   });
 
   const mockedStore = configureStore({
@@ -28,7 +29,6 @@ MockedStore.propTypes = {
 export default {
   title: 'TaskList',
   component: TaskList,
-
   tags: ['autodocs'],
   excludeStories: ['MockedStore'],
 };
